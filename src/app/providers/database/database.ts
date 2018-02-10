@@ -24,9 +24,9 @@ export class Database {
 
 
 
-  addComic(title, character, rating, note, image) {
+  addComic(title, character, rating, note) {
     var timeStamp = new Date().toISOString(),
-      base64String = image.substring(23),
+
       comic = {
         _id: timeStamp,
         title: title,
@@ -34,10 +34,6 @@ export class Database {
         rating: rating,
         note: note,
         _attachments: {
-          "character.jpg": {
-            content_type: 'image/jpeg',
-            data: base64String
-          }
         }
       };
 
@@ -53,22 +49,18 @@ export class Database {
 
 
 
-  updateComic(id, title, character, rating, note, image, revision) {
-    var base64String = image.substring(23),
-      comic = {
-        _id: id,
-        _rev: revision,
-        title: title,
-        character: character,
-        rating: rating,
-        note: note,
-        _attachments: {
-          "character.jpg": {
-            content_type: 'image/jpeg',
-            data: base64String
-          }
-        }
-      };
+  updateComic(id, title, character, rating, note, revision) {
+
+    var comic = {
+      _id: id,
+      _rev: revision,
+      title: title,
+      character: character,
+      rating: rating,
+      note: note,
+      _attachments: {
+      }
+    };
 
     return new Promise(resolve => {
       this._DB.put(comic)
@@ -89,11 +81,11 @@ export class Database {
       this._DB.get(id, { attachments: true })
         .then((doc) => {
           var item = [],
-            dataURIPrefix = 'data:image/jpeg;base64,',
+
             attachment;
 
           if (doc._attachments) {
-            attachment = doc._attachments["character.jpg"].data;
+            attachment = '';
           }
 
           item.push(
@@ -103,8 +95,7 @@ export class Database {
               character: doc.character,
               title: doc.title,
               note: doc.note,
-              rating: doc.rating,
-              image: dataURIPrefix + attachment
+              rating: doc.rating
             });
           resolve(item);
         })
@@ -126,11 +117,11 @@ export class Database {
 
         for (k in row) {
           var item = row[k].doc,
-            dataURIPrefix = 'data:image/jpeg;base64,',
+
             attachment;
 
           if (item._attachments) {
-            attachment = dataURIPrefix + item._attachments["character.jpg"].data;
+            attachment = '';
           }
 
           items.push(
@@ -140,8 +131,7 @@ export class Database {
               character: item.character,
               title: item.title,
               note: item.note,
-              rating: item.rating,
-              image: attachment
+              rating: item.rating
             });
         }
         resolve(items);

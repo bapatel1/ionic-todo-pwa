@@ -9,7 +9,6 @@ import { Camera } from '@ionic-native/camera';
 import { MyApp } from './app.component';
 import { HomePage } from './pages/home/home';
 import { Database } from './providers/database/database';
-import { Image } from './providers/image/image';
 
 @NgModule({
   declarations: [
@@ -31,8 +30,7 @@ import { Image } from './providers/image/image';
     StatusBar,
     SplashScreen,
     { provide: ErrorHandler, useClass: IonicErrorHandler },
-    Database,
-    Image
+    Database
   ]
 })
 export class AppModule { }

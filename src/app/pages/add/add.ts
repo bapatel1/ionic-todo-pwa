@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, ToastController } from 'ionic-angular';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
-import { Image } from '../../providers/image/image';
 import { Database } from '../../providers/database/database';
 
 /**
@@ -23,8 +22,6 @@ export class AddPage {
   public comicTitle: any;
   public comicRating: any;
   public comicNote: any;
-  public comicImage: any;
-  public characterImage: any;
   public recordId: any;
   public revisionId: any;
   public isEdited: boolean = false;
@@ -35,14 +32,12 @@ export class AddPage {
   constructor(public navCtrl: NavController,
     public NP: NavParams,
     public fb: FormBuilder,
-    public IMAGE: Image,
     public DB: Database,
     public toastCtrl: ToastController) {
     this.form = fb.group({
       "character": ["", Validators.required],
       "title": ["", Validators.required],
       "rating": ["", Validators.required],
-      "image": ["", Validators.required],
       "note": ["", Validators.required]
     });
 
@@ -74,8 +69,6 @@ export class AddPage {
         this.comicTitle = doc[0].title;
         this.comicRating = doc[0].rating;
         this.comicNote = doc[0].note;
-        this.comicImage = doc[0].image;
-        this.characterImage = doc[0].image;
         this.recordId = doc[0].id;
         this.revisionId = doc[0].rev;
       });
@@ -87,20 +80,19 @@ export class AddPage {
     let character: string = this.form.controls["character"].value,
       title: string = this.form.controls["title"].value,
       rating: number = this.form.controls["rating"].value,
-      image: string = this.form.controls["image"].value,
       note: string = this.form.controls["note"].value,
       revision: string = this.revisionId,
       id: any = this.recordId;
 
     if (this.recordId !== '') {
-      this.DB.updateComic(id, title, character, rating, note, image, revision)
+      this.DB.updateComic(id, title, character, rating, note, revision)
         .then((data) => {
           this.hideForm = true;
           this.sendNotification(`${character} was updated in your comic characters list`);
         });
     }
     else {
-      this.DB.addComic(title, character, rating, note, image)
+      this.DB.addComic(title, character, rating, note)
         .then((data) => {
           this.hideForm = true;
           this.resetFields();
@@ -109,31 +101,6 @@ export class AddPage {
     }
   }
 
-
-
-  takePhotograph() {
-    this.IMAGE.takePhotograph()
-      .then((image) => {
-        this.characterImage = image.toString();
-        this.comicImage = image.toString();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
-
-
-
-  selectImage() {
-    this.IMAGE.selectPhotograph()
-      .then((image) => {
-        this.characterImage = image.toString();
-        this.comicImage = image.toString();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  }
 
 
 
@@ -161,8 +128,6 @@ export class AddPage {
     this.comicRating = "";
     this.comicCharacter = "";
     this.comicNote = "";
-    this.comicImage = "";
-    this.characterImage = "";
   }
 
 
