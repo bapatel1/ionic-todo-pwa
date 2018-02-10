@@ -1,11 +1,15 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpModule } from '@angular/http';
+
 import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-
+import { Camera } from '@ionic-native/camera';
 import { MyApp } from './app.component';
-import { HomePage } from '../pages/home/home';
+import { HomePage } from './pages/home/home';
+import { Database } from './providers/database/database';
+import { Image } from './providers/image/image';
 
 @NgModule({
   declarations: [
@@ -14,6 +18,7 @@ import { HomePage } from '../pages/home/home';
   ],
   imports: [
     BrowserModule,
+    HttpModule,
     IonicModule.forRoot(MyApp)
   ],
   bootstrap: [IonicApp],
@@ -22,9 +27,12 @@ import { HomePage } from '../pages/home/home';
     HomePage
   ],
   providers: [
+
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    { provide: ErrorHandler, useClass: IonicErrorHandler },
+    Database,
+    Image
   ]
 })
-export class AppModule {}
+export class AppModule { }
