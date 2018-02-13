@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, AlertController, ToastController } from 'ionic-angular';
 import { Database } from '../../providers/database/database';
 
 @Component({
@@ -12,6 +12,8 @@ export class HomePage {
   public comics: any;
 
   constructor(public navCtrl: NavController,
+    public alertCtrl: AlertController,
+    public toastCtrl: ToastController,
     public DB: Database) {
 
   }
@@ -38,6 +40,15 @@ export class HomePage {
   }
 
 
+  displayAlert(message): void {
+    let headsUp = this.alertCtrl.create({
+      title: 'Heads Up!',
+      subTitle: message,
+      buttons: ['Got It!']
+    });
+
+    headsUp.present();
+  }
 
   addCharacter() {
     this.navCtrl.push('AddPage');
